@@ -1,0 +1,74 @@
+[
+ {
+  "tag": "BUTTON",
+  "w": 42,
+  "placeholder": "",
+  "text": ""
+ },
+ {
+  "tag": "BUTTON",
+  "w": 40,
+  "placeholder": "",
+  "text": ""
+ },
+ {
+  "tag": "BUTTON",
+  "w": 154,
+  "placeholder": "",
+  "text": "Edit Profile"
+ },
+ {
+  "tag": "BUTTON",
+  "w": 196,
+  "placeholder": "",
+  "text": "EHR Export"
+ },
+ {
+  "tag": "BUTTON",
+  "w": 196,
+  "placeholder": "",
+  "text": "Data Export"
+ },
+ {
+  "tag": "BUTTON",
+  "w": 80,
+  "placeholder": "",
+  "text": ""
+ },
+ {
+  "tag": "BUTTON",
+  "w": 173,
+  "placeholder": "",
+  "text": "Surveillance"
+ },
+ {
+  "tag": "BUTTON",
+  "w": 135,
+  "placeholder": "",
+  "text": "Fleet Hub"
+ },
+ {
+  "tag": "BUTTON",
+  "w": 150,
+  "placeholder": "",
+  "text": "Verified ID"
+ },
+ {
+  "tag": "BUTTON",
+  "w": 187,
+  "placeholder": "",
+  "text": "Pharmacology"
+ },
+ {
+  "tag": "BUTTON",
+  "w": 168,
+  "placeholder": "",
+  "text": "Critical Log"
+ },
+ {
+  "tag": "BUTTON",
+  "w": 217,
+  "placeholder": "",
+  "text": "Telemetry Stream"
+ }
+]

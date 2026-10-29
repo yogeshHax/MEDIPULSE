@@ -1,0 +1,38 @@
+# Environment
+.env
+*.env
+.env.*
+!.env.example
+
+# Dependency / build
+node_modules/
+dist/
+.coverage
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+coverage/
+.nyc_output/
+
+# Firebase service accounts / secrets — NEVER COMMIT
+serviceAccountKey.json
+firebase-service-account.json
+*service-account*.json
+service-key.json
+admin-sdk-key.json
+*.pem
+*.key
+
+# Private / IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# Local demo data
+.vercel
+.firebase/
+*-debug.log

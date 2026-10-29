@@ -1,0 +1,30 @@
+[
+ {
+  "tag": "INPUT",
+  "type": "text",
+  "placeholder": "Legal Full Name",
+  "text": "",
+  "cls": "w-full p-6 bg-slate-50 dark:bg-slate-800 dark:text-white rou"
+ },
+ {
+  "tag": "INPUT",
+  "type": "email",
+  "placeholder": "Verified Email",
+  "text": "",
+  "cls": "w-full p-6 bg-slate-50 dark:bg-slate-800 dark:text-white rou"
+ },
+ {
+  "tag": "SELECT",
+  "type": "select-one",
+  "placeholder": "",
+  "text": "Patient AccessMedical Officer Command",
+  "cls": "w-full p-6 bg-slate-50 dark:bg-slate-800 dark:text-white rou"
+ },
+ {
+  "tag": "BUTTON",
+  "type": "submit",
+  "placeholder": "",
+  "text": "Launch Hub",
+  "cls": "w-full py-7 bg-blue-600 text-white rounded-[2.5rem] font-bla"
+ }
+]

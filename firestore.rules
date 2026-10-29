@@ -1,0 +1,121 @@
+rules_version = '2';
+
+/**
+ * MediPulse — Cloud Firestore security rules.
+ *
+ * These rules are the ONLY place data access is enforced. The React app hides
+ * controls for convenience, but nothing here trusts the client.
+ *
+ * Collections
+ *   users/{uid}                          profile (role: 'patient' | 'doctor')
+ *   patients/{patientId}                 patient registry document
+ *   patients/{patientId}/readings/{id}   summary readings (optional ECG batch)
+ *   patients/{patientId}/alerts/{id}     alerts + lifecycle status
+ *   doctors/{uid}/assignments/{pid}      doctor → patient authorisation links
+ *   _medipulse_probe/{id}                reachability probe only (public, no data)
+ *
+ * Deploy:  firebase deploy --only firestore:rules
+ * Docs:    docs/firebase-setup.md
+ */
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isSelf(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function myRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function isDoctor() {
+      return signedIn() && myRole() == 'doctor';
+    }
+
+    /** A doctor may only touch patients linked from their own assignment list. */
+    function assignedTo(patientId) {
+      return signedIn()
+        && exists(/databases/$(database)/documents/doctors/$(request.auth.uid)/assignments/$(patientId));
+    }
+
+    function canReadPatient(patientId) {
+      return isSelf(patientId) || (isDoctor() && assignedTo(patientId));
+    }
+
+    // ── Profiles ────────────────────────────────────────────────────────────
+    match /users/{uid} {
+      allow read: if isSelf(uid) || (isDoctor() && assignedTo(uid));
+      // A user may only create their own profile, and only with a valid role.
+      allow create: if isSelf(uid)
+        && request.resource.data.id == uid
+        && request.resource.data.role in ['patient', 'doctor'];
+      // Role is immutable from the client: no privilege escalation by re-writing the doc.
+      allow update: if isSelf(uid)
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.id == resource.data.id;
+      allow delete: if false;
+    }
+
+    // ── Patient registry ───────────────────────────────────────────────────
+    match /patients/{patientId} {
+      allow read: if canReadPatient(patientId);
+      // Registry documents are provisioned server-side / by an administrator.
+      allow write: if false;
+    }
+
+    // ── Readings (summary + optional compressed waveform batch) ────────────
+    match /patients/{patientId}/readings/{readingId} {
+      allow read: if canReadPatient(patientId);
+      // A patient (or a doctor caring for them) may append a reading.
+      allow create: if canReadPatient(patientId)
+        && request.resource.data.patientId == patientId
+        && request.resource.data.timestamp is number
+        && (request.resource.data.bpm == null
+            || (request.resource.data.bpm is number
+                && request.resource.data.bpm >= 10
+                && request.resource.data.bpm <= 400));
+      // Readings are an append-only clinical record.
+      allow update, delete: if false;
+    }
+
+    // ── Alerts ─────────────────────────────────────────────────────────────
+    match /patients/{patientId}/alerts/{alertId} {
+      allow read: if canReadPatient(patientId);
+      allow create: if canReadPatient(patientId)
+        && request.resource.data.patientId == patientId
+        && request.resource.data.kind in
+             ['arrhythmia', 'bradycardia', 'tachycardia', 'fall', 'manual-emergency', 'critical-ai']
+        && request.resource.data.status in ['created', 'failed'];
+      // Acknowledgement/resolution is a clinician action; status only moves forward.
+      allow update: if isDoctor() && assignedTo(patientId)
+        && request.resource.data.patientId == resource.data.patientId
+        && request.resource.data.status in ['acknowledged', 'resolved', 'failed'];
+      allow delete: if false;
+    }
+
+    // ── Doctor ↔ patient assignments ───────────────────────────────────────
+    match /doctors/{uid}/assignments/{patientId} {
+      allow read: if isSelf(uid);
+      // Assignment is an administrative act — never self-granted.
+      allow write: if false;
+    }
+
+    // ── Reachability probe ─────────────────────────────────────────────────
+    // The web client checks this single, empty collection before sign-in to decide
+    // whether Firestore is reachable (lib/dataLayer.chooseAdapter). It stores no
+    // personal data and is write-protected.
+    match /_medipulse_probe/{docId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Everything else is closed by default.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

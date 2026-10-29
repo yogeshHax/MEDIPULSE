@@ -1,0 +1,23 @@
+
+<--- Last few GCs --->
+
+[13160:000001BD380DF000]    29851 ms: Scavenge (interleaved) 4054.1 (4129.9) -> 4048.1 (4130.9) MB, pooled: 0 MB, 14.05 / 0.00 ms  (average mu = 0.657, current mu = 0.449) allocation failure; 
+[13160:000001BD380DF000]    29864 ms: Scavenge 4055.0 (4130.9) -> 4049.0 (4147.9) MB, pooled: 0 MB, 6.15 / 0.00 ms  (average mu = 0.657, current mu = 0.449) allocation failure; 
+
+
+<--- JS stacktrace --->
+
+FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory
+----- Native stack trace -----
+
+ 1: 00007FF734084BB7 node::SetCppgcReference+21127
+ 2: 00007FF733FE4C6B EVP_MD_meth_get_input_blocksize+102619
+ 3: 00007FF734BF2A11 v8::Isolate::ReportExternalAllocationLimitReached+65
+ 4: 00007FF734BDF4C6 v8::Function::Experimental_IsNopFunction+3318
+ 5: 00007FF734A3BB10 v8::internal::StrongRootAllocatorBase::StrongRootAllocatorBase+33904
+ 6: 00007FF734A3819A v8::internal::StrongRootAllocatorBase::StrongRootAllocatorBase+19194
+ 7: 00007FF734A4E74C v8::Isolate::GetHeapProfiler+8012
+ 8: 00007FF734A4EFCA v8::Isolate::GetHeapProfiler+10186
+ 9: 00007FF734A5FA1B v8::Isolate::GetHeapProfiler+78363
+10: 00007FF73472BDEB v8::base::AddressSpaceReservation::AddressSpaceReservation+324187
+11: 00007FF6D4C6DAFA 

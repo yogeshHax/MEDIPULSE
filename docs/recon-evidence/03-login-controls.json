@@ -1,0 +1,34 @@
+[
+  {
+    "tag": "INPUT",
+    "type": "text",
+    "placeholder": "Legal Full Name",
+    "id": "",
+    "name": "",
+    "text": ""
+  },
+  {
+    "tag": "INPUT",
+    "type": "email",
+    "placeholder": "Verified Email",
+    "id": "",
+    "name": "",
+    "text": ""
+  },
+  {
+    "tag": "SELECT",
+    "type": "select-one",
+    "placeholder": "",
+    "id": "",
+    "name": "",
+    "text": ""
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "placeholder": "",
+    "id": "",
+    "name": "",
+    "text": "Launch Hub"
+  }
+]

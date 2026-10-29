@@ -1,0 +1,20 @@
+[
+ {
+  "tag": "INPUT",
+  "w": 261,
+  "placeholder": "ESP32 SSID",
+  "text": ""
+ },
+ {
+  "tag": "INPUT",
+  "w": 261,
+  "placeholder": "Passkey",
+  "text": ""
+ },
+ {
+  "tag": "BUTTON",
+  "w": 542,
+  "placeholder": "",
+  "text": "Establish Hardware Link"
+ }
+]
